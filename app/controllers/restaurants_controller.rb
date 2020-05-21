@@ -9,14 +9,16 @@ class RestaurantsController < ApplicationController
   end
 
   def new
-    @review = Review.new
+    @restaurant = Restaurant.new
   end
 
   def create
-    @review = Review.new(review_params)
-    @review.restaurant = @restaurant
-    @review.save
-    redirect_to restaurant_path(@restaurant)
+    @restaurant = Restaurant.new(restaurant_params)
+    if @restaurant.save
+      redirect_to restaurants_path
+    else
+      render :new
+    end
   end
 
   private
@@ -25,7 +27,7 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.find(params[:id])
   end
 
-  def review_params
-    params.require(:review).permit(:content)
+  def restaurant_params
+    params.require(:restaurant).permit(:phone_number, :address, :category, :name)
   end
 end
